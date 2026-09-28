@@ -131,6 +131,20 @@ AVATARS = {"user": "🧑‍💻", "assistant": "🤖"}
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+if "ended" not in st.session_state:
+    st.session_state.ended = False
+
+def end_chat():
+    st.session_state.ended = True
+
+if st.session_state.ended:
+    st.success("See you soon! 👋")
+    if st.button("Start a new chat"):
+        st.session_state.ended = False
+        st.session_state.messages = []
+        st.rerun()
+    st.stop()    
+
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"], avatar=AVATARS[msg["role"]]):
         st.write(msg["content"])
@@ -148,7 +162,13 @@ def get_reply():
         if text:
             yield text
 
-prompt = st.chat_input("Ask me something")
+ #prompt = st.chat_input("Ask me something")
+with st.bottom:
+    col1, col2 = st.columns([8, 1], vertical_alignment="center")
+    with col1:
+        prompt = st.chat_input("Ask me something")
+    with col2:
+        st.button("Exit", on_click=end_chat)
 
 if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
