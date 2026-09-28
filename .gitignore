@@ -1,0 +1,5 @@
+cenv/
+.streamlit/secrets.toml
+.env
+__pycache__/
+.files/
